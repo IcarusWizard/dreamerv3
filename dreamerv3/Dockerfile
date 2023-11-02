@@ -41,12 +41,13 @@ RUN pip3 install robodesk
 RUN pip3 install bsuite
 
 # Agent
-RUN pip3 install jax[cuda11_cudnn82] -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+RUN pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 RUN pip3 install jaxlib
 RUN pip3 install tensorflow_probability
 RUN pip3 install optax
 RUN pip3 install tensorflow-cpu
 ENV XLA_PYTHON_CLIENT_MEM_FRACTION 0.8
+ENV LD_LIBRARY_PATH=''
 
 # Google Cloud DNS cache (optional)
 ENV GCS_RESOLVE_REFRESH_SECS=60
@@ -56,7 +57,7 @@ ENV GCS_READ_REQUEST_TIMEOUT_SECS=300
 ENV GCS_WRITE_REQUEST_TIMEOUT_SECS=600
 
 # Embodied
-RUN pip3 install numpy cloudpickle ruamel.yaml rich zmq msgpack
+RUN pip3 install numpy cloudpickle 'ruamel.yaml<0.18' rich zmq msgpack
 COPY . /embodied
 RUN chown -R 1000:root /embodied && chmod -R 775 /embodied
 
