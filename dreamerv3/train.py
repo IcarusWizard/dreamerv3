@@ -1,6 +1,6 @@
 import importlib
 import pathlib
-import sys
+import sys, os
 import warnings
 from functools import partial as bind
 
@@ -22,6 +22,9 @@ from embodied import wrappers
 
 def main(argv=None):
   from . import agent as agt
+
+  import clearml
+  task = clearml.Task.init(output_uri=True)
 
   parsed, other = embodied.Flags(configs=['defaults']).parse_known(argv)
   config = embodied.Config(agt.Agent.configs['defaults'])
@@ -104,6 +107,10 @@ def main(argv=None):
     for obj in cleanup:
       obj.close()
 
+  files = os.listdir(args.logdir)
+  for file in files:
+    if file.startswith('events'): continue
+    task.upload_artifact(file, os.path.join(args.logdir, file))
 
 def make_logger(parsed, logdir, step, config):
   multiplier = config.env.get(config.task.split('_')[0], {}).get('repeat', 1)
