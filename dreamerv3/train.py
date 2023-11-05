@@ -24,7 +24,14 @@ def main(argv=None):
   from . import agent as agt
 
   import clearml
-  task = clearml.Task.init(output_uri=True)
+  task = clearml.Task.init(project_name='Users/xingyuanzhang/dreamerv3-atari', task_name='test', output_uri=True)
+  clearml_parameters = task.get_parameters()
+  if clearml_parameters.get('Args', None) is not None and argv is None:
+    args = clearml_parameters['Args']
+    argv = []
+    for k, v in args.items():
+      argv.append(f'--{k}')
+      argv.append(str(v))
 
   parsed, other = embodied.Flags(configs=['defaults']).parse_known(argv)
   config = embodied.Config(agt.Agent.configs['defaults'])

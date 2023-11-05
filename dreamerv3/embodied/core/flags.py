@@ -18,10 +18,10 @@ class Flags:
     return parsed
 
   def parse_known(self, argv=None, help_exists=False):
-    print(argv)
+    # print(argv)
     if argv is None:
       argv = sys.argv[1:]
-    print(argv)
+    # print(argv)
     if '--help' in argv:
       print('\nHelp:')
       lines = str(self._config).split('\n')[2:]
