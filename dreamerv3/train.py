@@ -26,7 +26,7 @@ def main(argv=None):
   import clearml
   task = clearml.Task.init(project_name='Users/xingyuanzhang/dreamerv3-atari', task_name='test', output_uri=True)
   clearml_parameters = task.get_parameters()
-  if clearml_parameters.get('Args', None) is not None and argv is None:
+  if clearml_parameters.get('Args', None) is not None:
     args = clearml_parameters['Args']
     argv = []
     for k, v in args.items():
