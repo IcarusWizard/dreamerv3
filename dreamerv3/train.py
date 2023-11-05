@@ -26,14 +26,13 @@ def main(argv=None):
   import clearml
   task = clearml.Task.init(project_name='Users/xingyuanzhang/dreamerv3-atari', task_name='test', output_uri=True)
   clearml_parameters = task.get_parameters()
-  print(clearml_parameters)
-  if clearml_parameters.get('Args', None) is not None:
-    args = clearml_parameters['Args']
-    argv = []
-    for k, v in args.items():
-      argv.append(f'--{k}')
+  argv = []
+  for k, v in clearml_parameters.items():
+    if k.startswith('Args'):
+      argv.append(f'--{k[5:]}')
       argv.append(str(v))
-  print(argv)
+  if len(argv) == 0:
+    argv = None
 
   parsed, other = embodied.Flags(configs=['defaults']).parse_known(argv)
   config = embodied.Config(agt.Agent.configs['defaults'])
