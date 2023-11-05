@@ -32,6 +32,7 @@ def main(argv=None):
     for k, v in args.items():
       argv.append(f'--{k}')
       argv.append(str(v))
+  print(argv)
 
   parsed, other = embodied.Flags(configs=['defaults']).parse_known(argv)
   config = embodied.Config(agt.Agent.configs['defaults'])
