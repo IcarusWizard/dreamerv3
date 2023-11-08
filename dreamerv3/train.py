@@ -48,7 +48,7 @@ def main(argv=None):
   logdir.mkdirs()
   config.save(logdir / 'config.yaml')
   step = embodied.Counter()
-  logger = make_logger(parsed, logdir, step, config)
+  logger = make_logger(parsed, logdir, step, config, task)
 
   cleanup = []
   try:
@@ -92,10 +92,11 @@ def main(argv=None):
           agent, env, replay, eval_replay, logger, args)
 
     elif args.script == 'eval_only':
+      replay = make_replay(config, logdir / 'replay')
       env = make_envs(config)  # mode='eval'
       cleanup.append(env)
       agent = agt.Agent(env.obs_space, env.act_space, step, config)
-      embodied.run.eval_only(agent, env, logger, args)
+      embodied.run.eval_only(agent, env, replay, logger, args)
 
     elif args.script == 'parallel':
       assert config.run.actor_batch <= config.envs.amount, (
@@ -120,13 +121,13 @@ def main(argv=None):
     if file.startswith('events'): continue
     task.upload_artifact(file, os.path.join(args.logdir, file))
 
-def make_logger(parsed, logdir, step, config):
+def make_logger(parsed, logdir, step, config, clearml_task=None):
   multiplier = config.env.get(config.task.split('_')[0], {}).get('repeat', 1)
   logger = embodied.Logger(step, [
       embodied.logger.TerminalOutput(config.filter),
       embodied.logger.JSONLOutput(logdir, 'metrics.jsonl'),
       embodied.logger.JSONLOutput(logdir, 'scores.jsonl', 'episode/score'),
-      embodied.logger.TensorBoardOutput(logdir),
+      embodied.logger.TensorBoardOutput(logdir, clearml_task),
       # embodied.logger.WandBOutput(logdir.name, config),
       # embodied.logger.MLFlowOutput(logdir.name),
   ], multiplier)

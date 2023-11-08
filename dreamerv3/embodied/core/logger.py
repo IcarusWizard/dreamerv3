@@ -5,6 +5,7 @@ import json
 import os
 import re
 import time
+import uuid
 
 import numpy as np
 
@@ -157,9 +158,10 @@ class JSONLOutput(AsyncOutput):
 
 class TensorBoardOutput(AsyncOutput):
 
-  def __init__(self, logdir, fps=20, maxsize=1e9, parallel=True):
+  def __init__(self, logdir, clearml_task=None, fps=20, maxsize=1e9, parallel=True):
     super().__init__(self._write, parallel)
     self._logdir = str(logdir)
+    self.clearml_task = clearml_task
     if self._logdir.startswith('/gcs/'):
       self._logdir = self._logdir.replace('/gcs/', 'gs://')
     self._fps = fps
@@ -220,6 +222,10 @@ class TensorBoardOutput(AsyncOutput):
       image = tf1.Summary.Image(height=H, width=W, colorspace=C)
       image.encoded_image_string = _encode_gif(video, self._fps)
       summary.value.add(tag=name, image=image)
+      filename = uuid.uuid4()
+      with open(f'/tmp/{filename}.gif', 'wb') as f:
+        f.write(image.encoded_image_string)
+      self.clearml_task.get_logger().report_media(name, 'default', step, local_path=f'/tmp/{filename}.gif', delete_after_upload=True)
       tf.summary.experimental.write_raw_pb(summary.SerializeToString(), step)
     except (IOError, OSError) as e:
       print('GIF summaries require ffmpeg in $PATH.', e)
