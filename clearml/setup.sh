@@ -5,7 +5,7 @@ echo "Running setup script."
 pip3 install clearml
 pip3 install pyvirtualdisplay
 pip3 install "numpy<=1.20"
-pip3 install "jax[cuda11_cudnn86]==0.4.6" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip3 install "jax[cuda11_pip]==0.4.6" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 # export custom_python_path=`which python3`
 
