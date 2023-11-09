@@ -220,6 +220,5 @@ def wrap_env(env, config):
 
 
 if __name__ == '__main__':
-  display = Display(visible=False, size=(1024, 768), color_depth=24, extra_args=['-ac', '+extension', 'GLX', '+render', '-noreset'])
-  with Display() as disp:
+  with Display(visible=False, size=(1024, 768), color_depth=24, extra_args=['-ac', '+extension', 'GLX', '+render', '-noreset']) as disp:
     main()
