@@ -18,6 +18,7 @@ __package__ = directory.name
 
 import embodied
 from embodied import wrappers
+from pyvirtualdisplay import Display
 
 
 def main(argv=None):
@@ -219,4 +220,6 @@ def wrap_env(env, config):
 
 
 if __name__ == '__main__':
-  main()
+  display = Display(visible=False, size=(1024, 768))
+  with Display() as disp:
+    main()
