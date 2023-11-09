@@ -4,6 +4,7 @@ echo "Running setup script."
 # install poetry
 pip3 install clearml
 pip3 install pyvirtualdisplay
+pip3 install git+https://github.com/minerllabs/minerl
 
 # export custom_python_path=`which python3`
 
