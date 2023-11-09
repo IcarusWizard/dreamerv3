@@ -3,6 +3,7 @@ echo "Running setup script."
 
 # install poetry
 pip3 install clearml
+pip3 install "numpy<=1.20"
 
 cat > $CLEARML_CUSTOM_BUILD_OUTPUT << EOL
 {
