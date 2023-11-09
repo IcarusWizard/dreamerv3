@@ -6,7 +6,7 @@ pip3 install clearml
 pip3 install "numpy<=1.20"
 pip3 install pyvirtualdisplay
 
-export custom_python_path=`which python3`
+# export custom_python_path=`which python3`
 
 cat > $CLEARML_CUSTOM_BUILD_OUTPUT << EOL
 {
