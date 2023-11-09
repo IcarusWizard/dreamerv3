@@ -3,7 +3,6 @@ echo "Running setup script."
 
 # install poetry
 pip3 install clearml
-pip3 install "numpy<=1.20"
 pip3 install pyvirtualdisplay
 
 # export custom_python_path=`which python3`
