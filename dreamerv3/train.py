@@ -25,7 +25,7 @@ def main(argv=None):
   from . import agent as agt
 
   import clearml
-  task = clearml.Task.init(project_name='Users/xingyuanzhang/dreamerv3-atari', task_name='test', output_uri=True)
+  task = clearml.Task.init(project_name='Users/xingyuanzhang/dreamerv3-atari', task_name='test', auto_connect_frameworks=dict(tensorflow=False), output_uri=True)
   clearml_parameters = task.get_parameters()
   argv = []
   for k, v in clearml_parameters.items():
@@ -66,7 +66,7 @@ def main(argv=None):
       env = make_envs(config)
       cleanup.append(env)
       agent = agt.Agent(env.obs_space, env.act_space, step, config)
-      embodied.run.train_save(agent, env, replay, logger, args)
+      embodied.run.train_save(agent, env, replay, logger, args, clearml_task=task)
 
     elif args.script == 'train_eval':
       replay = make_replay(config, logdir / 'replay')

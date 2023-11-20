@@ -1,4 +1,5 @@
 import io
+import os
 import re
 from datetime import datetime
 
@@ -6,7 +7,7 @@ import embodied
 import numpy as np
 
 
-def train_save(agent, env, replay, logger, args):
+def train_save(agent, env, replay, logger, args, clearml_task):
 
   logdir = embodied.Path(args.logdir)
   logdir.mkdirs()
@@ -127,4 +128,8 @@ def train_save(agent, env, replay, logger, args):
     driver(policy, steps=100)
     if should_save(step):
       checkpoint.save()
+      files = os.listdir(args.logdir)
+      for file in files:
+        if file.startswith('events'): continue
+        clearml_task.upload_artifact(file, os.path.join(args.logdir, file))
   logger.write()
